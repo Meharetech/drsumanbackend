@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
 // @route   PUT api/founder
 // @desc    Update your clinical founder presence
-router.put('/', upload.single('image'), async (req, res) => {
+router.put('/', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'messageImage', maxCount: 1 }]), async (req, res) => {
     try {
         const { name, role, message, yearsExperience, whatsapp, linkedin, instagram, facebook, profileUrl, location, email, clinicalHours, mapUrl, phone } = req.body;
         
@@ -48,8 +48,12 @@ router.put('/', upload.single('image'), async (req, res) => {
             }
         };
 
-        if (req.file) {
-            updateData.$set.image = `/uploads/${req.file.filename}`;
+        if (req.files && req.files['image']) {
+            updateData.$set.image = `/uploads/${req.files['image'][0].filename}`;
+        }
+
+        if (req.files && req.files['messageImage']) {
+            updateData.$set.messageImage = `/uploads/${req.files['messageImage'][0].filename}`;
         }
 
         let founder = await Founder.findOneAndUpdate({}, updateData, { new: true, upsert: true });

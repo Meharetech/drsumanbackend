@@ -6,6 +6,7 @@ const FounderSchema = new mongoose.Schema({
     message: { type: String, required: true },
     yearsExperience: { type: String, default: '10+' },
     image: { type: String, required: true },
+    messageImage: { type: String, default: '/assets/founder-message.png' },
     socials: {
         whatsapp: { type: String },
         linkedin: { type: String },
